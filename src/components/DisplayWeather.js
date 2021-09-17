@@ -3,17 +3,7 @@ import style from'./DisplayWeather.module.css';
 
 export default function DisplayWeather (props) {
   const { temperature, description, img } = props.weather;
-  // const { temperature, description } = props.weather;
-  // console.log(props)
-
   let iconurl = "http://openweathermap.org/img/wn/" + img + "@2x.png";
-
-  // const compassPoints = ["North", "North East", "East", "South East", "South", "South West", 
-  //                          "West", "North West"];
-
-  
-
-  // console.log('the wind is ' + compassPoints[arrayPosition])
 
   return (
     <div>

@@ -24,11 +24,6 @@ body {
   box-sizing: border-box;
 }
 
-/* .container {
-  width: 87%;
-  margin: auto;
-} */
-
 a {
   text-decoration: none;
 }
@@ -43,7 +38,6 @@ img {
   width:100%;
 }
 
-
 .wrap{
   display: flex;
   flex-direction: column;
@@ -54,4 +48,11 @@ img {
   margin: auto;
   padding-top: 75px;
   padding-bottom: 122px;
+}
+
+.wrap button.active {
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 1;
+  color: white;
+  font-style: normal;
 }

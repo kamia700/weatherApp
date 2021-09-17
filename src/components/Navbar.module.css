@@ -1,6 +1,5 @@
 .visually__hidden:not(:focus):not(:active) {
   position: absolute;
-
   width: 1px;
   height: 1px;
   margin: -1px;
@@ -14,14 +13,15 @@
   overflow: hidden;
 }
 
-.menu_wrap {
+.menu__wrap {
   width: 100%;
-  /* height: 20%; */
+  height: max-content;
 }
 
 .menu {
   display: flex;
   justify-content: space-between;
+  height: 155px;
 }
 
 .form {
@@ -40,6 +40,7 @@
   font-size: 50px;
   line-height: 60px;
   color: white;
+  padding: 25px 0;
 }
 
 .form input:focus,
@@ -48,9 +49,8 @@
   color: black;
   font-size: 30px;
   line-height: 36px;
-  padding: 25px 25px;
+  padding-left: 25px;
 }
-
 
 .form input + .form__OKbtn {
   display: none;
@@ -64,12 +64,13 @@
   border: none;
 }
 
-.form input:focus + .form__OKbtn { 
+.form input:focus + .form__OKbtn,
+.form input:active + .form__OKbtn { 
   display: block;
   color: #498CEC;
  }
 
- .form__input::placeholder {
+.form__input::placeholder {
   color: white;
   opacity: 1;
 }
@@ -79,11 +80,16 @@
   justify-content: flex-start;
 }
 
+.form input:focus ~ .form__changes {
+  display: none;
+}
+
 .form__changes p {
   font-size: 18px;
   line-height: 22px;
   opacity: 0.6;
   padding-right: 60px;
+  margin-top: 5px;
 }
 
 .form__location {
@@ -97,15 +103,10 @@
   top: -5px;
 }
 
-/* .form__location svg {
-  position: absolute;
-  left: -35px;
-  top: -5px;
-} */
-
 .switch {
   display: flex;
   align-items: flex-start;
+  padding: 30px 0;
 }
 
 .switch span {
@@ -148,17 +149,9 @@
   border-bottom-right-radius: 8px;
 }
 
-.switch__wrap button.active {
-  background: rgba(255, 255, 255, 0.2);
-  opacity: 1;
-  color: white;
-  font-style: normal;
-}
-
 .switch__wrap button:hover {
   background: rgba(255, 255, 255, 0.1);
 }
-
 
 @media (max-width: 768px) {
   .form__changes p {

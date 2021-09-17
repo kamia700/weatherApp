@@ -19,47 +19,15 @@ class App extends React.Component {
       },
       weather: {},
       inputData: '',
-      units: 'metric'
+      units: 'metric',
+      activeClassBtn: 'Cbtn'
     }; 
-
-    // this.initialData = this.initialData.bind(this);
   }
 
   initialData(weatherData) {
     this.setState({ weather: weatherData});
 
   }
-
-  changeUnits=(unit,temp)=> {
-    this.setState({
-      units: unit
-  })
-
-  switch(unit) {
-    case 'imperial':
-      let fahrenheit = Math.round((temp * 1.8) + 32);
-      this.setState({
-        weather: {
-        ...this.state.weather,
-        temperature: fahrenheit
-        }
-      });
-      break;
-    case 'metric':
-      let celsius = Math.round(((temp - 32) / 1.8));
-      this.setState({
-        weather: {
-        ...this.state.weather,
-        temperature: celsius
-        }
-      });
-      break;
-    default:
-      unit='metric';
-    } 
-  }
-
-
 
   componentDidMount() {    
     // get device location
@@ -86,7 +54,7 @@ class App extends React.Component {
           this.setState({ weather: weatherData});
         })
       }, (error) => {
-          // this runs when an error occurs or when you deny access
+          // runs when an error occurs or when you deny access
           if (error.code === error.PERMISSION_DENIED) {
             console.log("User denied the request for Geolocation:-(");
           }
@@ -102,27 +70,18 @@ class App extends React.Component {
               pressure: response.data.main.pressure
             };
             this.setState({ weather: weatherData});
-            // initialData(weatherData);
-            // console.log(this);
-
-            console.log(response);
           })
         }
       );
-      // navigator.permissions.query({ name: 'geolocation' }).then(console.log("Geolocation is not supported by this browser."));
     } else {
       console.log("Geolocation is not supported by this browser.")      
     }
 
   }
 
-  // options = {
-  //   types: ['(cities)']
-  // }  
-
   changeWeather = (evt) => {
     evt.preventDefault();
-    Axios.get(`https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputData}&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
+    Axios.get(`https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputData}&lang=ru&appid=${API_KEY}&units=${this.state.units}`).then(response => {
       let weatherData = {
         location: response.data.name,
         wind: response.data.wind.speed,
@@ -133,22 +92,69 @@ class App extends React.Component {
         humidity: response.data.main.humidity,
         pressure: response.data.main.pressure
       };
-      this.setState({ weather: weatherData});
+      this.setState({ 
+        weather: weatherData
+      });
     })
   }
-  // changeUnits={this.changeUnits}
 
   //track the input value
-  change = (value) => {
-    // this.autocompliete = new google.maps.places.Autocomplete(input, options);
+  changeRegion = (value) => {
     this.setState({ inputData: value});
   }  
+
+  //track units value
+  changeUnits=(unit,temp)=> {
+    if (this.state.units !== unit) {
+      this.setState({
+        units: unit
+      })
+
+    switch(unit) {
+      case 'imperial':
+        let fahrenheit = Math.round((temp * 1.8) + 32);
+        this.setState({
+          weather: {
+          ...this.state.weather,
+          temperature: fahrenheit
+          }
+        });
+        break;
+      case 'metric':
+        let celsius = Math.round(((temp - 32) / 1.8));
+        this.setState({
+          weather: {
+          ...this.state.weather,
+          temperature: celsius
+          }
+        });
+        break;
+      default:
+        unit='metric';
+      } 
+
+    }
+  }
+
+  handleClick=(id) => {
+     this.setState({
+      activeClassBtn: id
+    })
+
+    if(this.state.activeClassBtn !== id) {
+      let el = document.getElementById(id);
+      el.classList.add('active');
+      let prevEl = document.getElementById(this.state.activeClassBtn);
+      prevEl.classList.remove('active');
+    } 
+
+  }
 
   render () {
     return (
       <div className="App">
         <div className={'wrap'}>
-          <Navbar changeWeather = {this.changeWeather} changeRegion={this.change} weather={this.state.weather} changeUnits={this.changeUnits} units={this.state.units}/>
+          <Navbar handleClick= {this.handleClick} changeWeather = {this.changeWeather} changeRegion={this.changeRegion} changeUnits={this.changeUnits} weather={this.state.weather} units={this.state.units} activeClassBtn={this.state.activeClassBtn}/>
           <DisplayWeather weather={this.state.weather} />
           <InfoBar weather={this.state.weather} />
         </div>
