@@ -53,7 +53,7 @@
 }
 
 .form input + .form__OKbtn {
-  display: none;
+  opacity: 0;
   position: absolute;
   top: 25px;
   right: 25px;
@@ -66,7 +66,7 @@
 
 .form input:focus + .form__OKbtn,
 .form input:active + .form__OKbtn { 
-  display: block;
+  opacity: 1;
   color: #498CEC;
  }
 
