@@ -39,7 +39,7 @@ class App extends React.Component {
         this.setState({coords:currentCoords});
         
         //API call
-        Axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${this.state.coords.latitude}&lon=${this.state.coords.longitude}&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
+        Axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${this.state.coords.latitude}&lon=${this.state.coords.longitude}&lang=ru&appid=${API_KEY}&units=metric/`).then(response => {
           let weatherData = {
             location: response.data.name,
             wind: response.data.wind.speed,
@@ -57,7 +57,7 @@ class App extends React.Component {
           if (error.code === error.PERMISSION_DENIED) {
             console.log("User denied the request for Geolocation:-(");
           }
-          Axios.get(`http://api.openweathermap.org/data/2.5/weather?q=Omsk&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
+          Axios.get(`http://api.openweathermap.org/data/2.5/weather?q=Omsk&lang=ru&appid=${API_KEY}&units=metric/`).then(response => {
             let weatherData = {
               location: response.data.name,
               wind: response.data.wind.speed,
@@ -80,7 +80,7 @@ class App extends React.Component {
 
   changeWeather = (evt) => {
     evt.preventDefault();
-    Axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputData}&lang=ru&appid=${API_KEY}&units=${this.state.units}`).then(response => {
+    Axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputData}&lang=ru&appid=${API_KEY}&units=${this.state.units}/`).then(response => {
       let weatherData = {
         location: response.data.name,
         wind: response.data.wind.speed,
