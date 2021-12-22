@@ -7,27 +7,26 @@ import InfoBar from './components/InfoBar.js';
 
 const API_KEY = '27ba8c742a54e5d3e7e1e27f3a0e5fa4';
 
-class App extends React.Component {
+const initialState = {
+  coords: {
+    latitude: 51,
+    longitude: -0.12
+  },
+  weather: {},
+  inputData: '',
+  units: 'metric',
+  activeClassBtn: 'Cbtn'
+} 
 
-  //state 
+class App extends React.Component {
   constructor() {
     super();
-    this.state = {
-      coords: {
-        latitude: 51,
-        longitude: -0.12
-      },
-      weather: {},
-      inputData: '',
-      units: 'metric',
-      activeClassBtn: 'Cbtn'
-    }; 
+    this.state = initialState;
   }
 
-  initialData(weatherData) {
-    this.setState({ weather: weatherData});
-
-  }
+  // initialData(weatherData) {
+  //   this.setState({ weather: weatherData});
+  // }
 
   componentDidMount() {    
     // get device location
@@ -40,7 +39,7 @@ class App extends React.Component {
         this.setState({coords:currentCoords});
         
         //API call
-        Axios.get(`https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?lat=${this.state.coords.latitude}&lon=${this.state.coords.longitude}&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
+        Axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${this.state.coords.latitude}&lon=${this.state.coords.longitude}&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
           let weatherData = {
             location: response.data.name,
             wind: response.data.wind.speed,
@@ -58,7 +57,7 @@ class App extends React.Component {
           if (error.code === error.PERMISSION_DENIED) {
             console.log("User denied the request for Geolocation:-(");
           }
-          Axios.get(`https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=Omsk&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
+          Axios.get(`http://api.openweathermap.org/data/2.5/weather?q=Omsk&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
             let weatherData = {
               location: response.data.name,
               wind: response.data.wind.speed,
@@ -81,7 +80,7 @@ class App extends React.Component {
 
   changeWeather = (evt) => {
     evt.preventDefault();
-    Axios.get(`https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputData}&lang=ru&appid=${API_KEY}&units=${this.state.units}`).then(response => {
+    Axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${this.state.inputData}&lang=ru&appid=${API_KEY}&units=${this.state.units}`).then(response => {
       let weatherData = {
         location: response.data.name,
         wind: response.data.wind.speed,
@@ -132,7 +131,6 @@ class App extends React.Component {
       default:
         unit='metric';
       } 
-
     }
   }
 
