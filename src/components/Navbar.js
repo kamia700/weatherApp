@@ -6,9 +6,9 @@ export default function Navbar (props) {
   return (
     <div className={style.menu__wrap}>
       <nav className={style.menu}>
-        <form className={style.form} onSubmit={(e) => {props.changeWeather(e)}}>
+        <form className={style.form} onSubmit={(e) => { props.changeWeather(e) }}>
           <label className={style.visually__hidden}>Название города</label>
-          <input className={style.form__input} placeholder={location || ''} onChange={(e) => props.changeRegion(e.target.value)} autoComplete="on" />
+          <input className={style.form__input} placeholder={location || ''} onChange={(e) => props.changeRegion(e)} autoComplete="on" />
           <button type="submit" className={style.form__OKbtn} >OK</button>
           <div className={style.form__changes}>
             <p>Сменить город</p>

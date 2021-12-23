@@ -13,9 +13,23 @@ const initialState = {
     longitude: -0.12
   },
   weather: {},
-  inputData: '',
+  inputData: 'hi',
   units: 'metric',
   activeClassBtn: 'Cbtn'
+} 
+
+let setData = (response) => {
+  let weatherData = {
+    location: response.data.name,
+    wind: response.data.wind.speed,
+    wind_dir: response.data.wind.deg,
+    temperature: response.data.main.temp,
+    description: response.data.weather[0].description,
+    img: response.data.weather[0].icon,
+    humidity: response.data.main.humidity,
+    pressure: response.data.main.pressure
+  };
+  return weatherData;
 } 
 
 class App extends React.Component {
@@ -23,10 +37,6 @@ class App extends React.Component {
     super();
     this.state = initialState;
   }
-
-  // initialData(weatherData) {
-  //   this.setState({ weather: weatherData});
-  // }
 
   componentDidMount() {    
     // get device location
@@ -38,68 +48,47 @@ class App extends React.Component {
         };
         this.setState({coords:currentCoords});
         
+
         //API call
         Axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${this.state.coords.latitude}&lon=${this.state.coords.longitude}&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
-          let weatherData = {
-            location: response.data.name,
-            wind: response.data.wind.speed,
-            wind_dir: response.data.wind.deg,
-            temperature: response.data.main.temp,
-            description: response.data.weather[0].description,
-            img: response.data.weather[0].icon,
-            humidity: response.data.main.humidity,
-            pressure: response.data.main.pressure
-          };
-          this.setState({ weather: weatherData});
+          this.setState({ weather: setData(response)});
         })
-      }, (error) => {
+        }, (error) => {
           // runs when an error occurs or when you deny access
           if (error.code === error.PERMISSION_DENIED) {
             console.log("User denied the request for Geolocation:-(");
           }
           Axios.get(`https://api.openweathermap.org/data/2.5/weather?q=Omsk&lang=ru&appid=${API_KEY}&units=metric`).then(response => {
-            let weatherData = {
-              location: response.data.name,
-              wind: response.data.wind.speed,
-              wind_dir: response.data.wind.deg,
-              temperature: response.data.main.temp,
-              description: response.data.weather[0].description,
-              img: response.data.weather[0].icon,
-              humidity: response.data.main.humidity,
-              pressure: response.data.main.pressure
-            };
-            this.setState({ weather: weatherData});
+            this.setState({ weather: setData(response)});
           })
         }
       );
     } else {
       console.log("Geolocation is not supported by this browser.")      
     }
-
   }
+
 
   changeWeather = (evt) => {
     evt.preventDefault();
+
     Axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.state.inputData}&lang=ru&appid=${API_KEY}&units=${this.state.units}`).then(response => {
-      let weatherData = {
-        location: response.data.name,
-        wind: response.data.wind.speed,
-        wind_dir: response.data.wind.deg,
-        temperature: response.data.main.temp,
-        description: response.data.weather[0].description,
-        img: response.data.weather[0].icon,
-        humidity: response.data.main.humidity,
-        pressure: response.data.main.pressure
-      };
-      this.setState({ 
-        weather: weatherData
-      });
-    })
+      this.setState({ weather: setData(response)});
+    }).catch(error => {
+      if (error.response.status !== 200) {
+        console.log(this.state.weather)
+        this.setState({ 
+          weather: this.state.weather
+        });
+        alert('Ooops, the city does not exist! Please, try again')
+      }
+    });
   }
 
   //track the input value
-  changeRegion = (value) => {
-    this.setState({ inputData: value});
+  changeRegion = (e) => {
+    e.preventDefault();
+    this.setState({ inputData: e.target.value});
   }  
 
   //track units value
@@ -145,14 +134,13 @@ class App extends React.Component {
       let prevEl = document.getElementById(this.state.activeClassBtn);
       prevEl.classList.remove('active');
     } 
-
   }
 
   render () {
     return (
       <div className="App">
         <div className={'wrap'}>
-          <Navbar handleClick= {this.handleClick} changeWeather = {this.changeWeather} changeRegion={this.changeRegion} changeUnits={this.changeUnits} weather={this.state.weather} units={this.state.units} activeClassBtn={this.state.activeClassBtn}/>
+          <Navbar handleClick={this.handleClick} changeWeather = {this.changeWeather} changeRegion={this.changeRegion} changeUnits={this.changeUnits} weather={this.state.weather} units={this.state.units} activeClassBtn={this.state.activeClassBtn}/>
           <DisplayWeather weather={this.state.weather} />
           <InfoBar weather={this.state.weather} />
         </div>
